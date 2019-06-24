@@ -50,6 +50,11 @@ class ShufflePlayers {
                 finalSortedPlayers.push(player2)
             } else {
                 if (player1) {
+
+                    player1.table.double.push(i)
+                    player1.currentTable = i
+                    finalSortedPlayers.push(player1)
+
                     this.lastDoubleTable = i  //only player2 is null, so the current table is the last double table
                 } else {
                     this.lastDoubleTable = i - 1 //player 1&2 are null, so the previous table is the last double table
@@ -81,6 +86,14 @@ class ShufflePlayers {
     _arrangeNextRound(finalSortedPlayers) {
         let nextTimeSingleHighPriority = [];
         let nextTimeDoubleLowPriority = [];
+
+        // const topPrioritySingles = finalSortedPlayers
+        //                             .sort((p1, p2) => p1.table.single.length - p2.table.single.length)
+        //                             .slice(0, 5)
+        //                             .map(p => { p.tmpSingle = 0; return p });
+
+        // finalSortedPlayers = finalSortedPlayers.filter(e => !topPrioritySingles.includes(e))
+
         for (let k = 0; k < finalSortedPlayers.length; k++) {
             const p = finalSortedPlayers[k];
             if (p.tmpSingle != 0) {
@@ -107,8 +120,17 @@ class ShufflePlayers {
         }
         //sort those player who will play single next time by single play time ascending
         nextTimeSingleHighPriority = nextTimeSingleHighPriority.sort((p1, p2) => p1.table.single.length - p2.table.single.length);
+
+        console.log("single player want tables " + nextTimeSingleHighPriority.length / 2)
+
         //shuffle those who play double this time
         nextTimeDoubleLowPriority = this._doShuffle(nextTimeDoubleLowPriority);
+        // return [
+        //     ...nextTimeDoubleLowPriority.slice(0, this.lastDoubleTable * 4),
+        //     ...[...topPrioritySingles, ...nextTimeSingleHighPriority],
+        //     ...nextTimeDoubleLowPriority.slice(this.lastDoubleTable * 4)
+        // ];
+
         return [
             ...nextTimeDoubleLowPriority.slice(0, this.lastDoubleTable * 4),
             ...nextTimeSingleHighPriority,
@@ -132,7 +154,7 @@ class ShufflePlayers {
 
 const tablesNumber = 16
 const rounds = 8
-const peopleNum = 47
+const peopleNum = 46
 
 const players = [...Array(peopleNum).keys()].map(i => ({
     name: ["player" + i],

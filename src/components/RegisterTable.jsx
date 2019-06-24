@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Button from '@material-ui/core/Button';
 
 const RegTable = (props) => {
 
@@ -14,11 +14,11 @@ const RegTable = (props) => {
                 </tr>
 
                 {props.players && props.players.map(p => (
-                    <tr key={p.firstName}>
+                    <tr key={p.firstName+p.lastName}>
                         <td>{p.firstName}</td>
                         <td>{p.lastName}</td>
                         <td>{p.level}</td>
-                        <td><button onClick={()=>props.deletePlayer(p)}>Delete</button></td>
+                        <td><Button onClick={()=>props.deletePlayer(p)}>Delete</Button></td>
                     </tr>
                 ))}
             </tbody>
