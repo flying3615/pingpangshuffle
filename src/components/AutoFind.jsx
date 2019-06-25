@@ -147,7 +147,7 @@ export default function AutoFind(props) {
     return (
         <div className={classes.root}>
             <Downshift
-                onChange={(p)=>props.addPlayers(p)}
+                onSelect={(p)=>{props.addPlayers(p); }}
                 itemToString={item => (item ? item : '')}
                 id="downshift-simple">
                 {({
