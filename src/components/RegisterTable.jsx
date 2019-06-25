@@ -1,28 +1,34 @@
 import React from 'react'
 import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const RegTable = (props) => {
 
     return (
-        <table>
-            <tbody>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Level</th>
-                    <th>Delete</th>
-                </tr>
-
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell>First Name</TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell>Level</TableCell>
+                    <TableCell>Delete</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 {props.players && props.players.map(p => (
-                    <tr key={p.firstName+p.lastName}>
-                        <td>{p.firstName}</td>
-                        <td>{p.lastName}</td>
-                        <td>{p.level}</td>
-                        <td><Button onClick={()=>props.deletePlayer(p)}>Delete</Button></td>
-                    </tr>
+                    <TableRow key={p.firstName+p.lastName}>
+                        <TableCell>{p.firstName}</TableCell>
+                        <TableCell>{p.lastName}</TableCell>
+                        <TableCell>{p.level}</TableCell>
+                        <TableCell><Button color="secondary" onClick={()=>props.deletePlayer(p)}>Delete</Button></TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     )
 }
 

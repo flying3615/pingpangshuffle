@@ -1,39 +1,55 @@
-import React from 'react'
-import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 
 
-const Wrapper = styled.div`
-    background-color: #333;
-    overflow: hidden;
-`
+import Play from '../container/Play'
+import Register from '../container/Register'
+import Statistic from '../container/Statistic'
 
-const Link = styled(NavLink)`
-    float: left;
-    color: #f2f2f2;
-    background-color: #333;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-    :hover {
-        background-color: #ddd;
-        color: black;
-    }
-`
-const activeStyle = {
-    backgroundColor: "#4CAF50",
-    color: "white",
-}
-
-const navigation = () => {
+function TabContainer(props) {
     return (
-        <Wrapper>
-            <Link to="/" activeStyle={activeStyle} exact >Home</Link>
-            <Link to="/register" activeStyle={activeStyle}>Register</Link>
-            <Link to="/play" activeStyle={activeStyle}>Play</Link>
-            <Link to="/statistic" activeStyle={activeStyle}>Statistic</Link>
-        </Wrapper>)
+        <Typography component="div" style={{ padding: 8 * 3 }}>
+            {props.children}
+        </Typography>
+    );
 }
 
-export default navigation
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    },
+}));
+
+export default function SimpleTabs() {
+    const classes = useStyles();
+    const [value, setValue] = React.useState(0);
+
+    function handleChange(event, newValue) {
+        setValue(newValue);
+    }
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Tabs value={value} onChange={handleChange}>
+                    <Tab label="Register" />
+                    <Tab label="Play" />
+                    <Tab label="Statistic" />
+                </Tabs>
+            </AppBar>
+            {value === 0 && <TabContainer><Register /></TabContainer>}
+            {value === 1 && <TabContainer><Play /></TabContainer>}
+            {value === 2 && <TabContainer><Statistic /></TabContainer>}
+        </div>
+    );
+}

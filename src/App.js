@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import Navigator from './components/Navigator'
 
 function App() {
   return (
     <div>
-      <h1>Home</h1>
+      <Navigator />
     </div>
   );
 }

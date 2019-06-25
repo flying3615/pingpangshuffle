@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import RegisterTable from '../components/RegisterTable'
-
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 class Register extends Component {
 
-    state = { players: [] }
+    state = { players: [], showTable: true }
 
     constructor(props) {
         super(props)
@@ -16,7 +19,7 @@ class Register extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log(this.firstNameRef.current.value)
+        console.log(this.firstNameRef.current.value + "???")
 
         this.setState({
             players: [...this.state.players, {
@@ -31,28 +34,78 @@ class Register extends Component {
     deletePlayer = (delPlayer) => {
         this.setState(
             {
-                players: [this.state.players
-                    .filter(p => p.firstName !== delPlayer.firstName && p.lastName !== delPlayer.lastName)]
+                players: this.state.players
+                    .filter(p => p.firstName !== delPlayer.firstName && p.lastName !== delPlayer.lastName)
             })
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" ref={this.firstNameRef} placeholder='First Name' />
-                    <input type="text" ref={this.lastNameRef} placeholder='Last Name' />
-                    <input type="text" ref={this.levelRef} placeholder='Level' />
-                    <input type="submit" value="Submit" />
-                </form>
+                <Container component="main" maxWidth="sm">
+                    <form onSubmit={this.handleSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    name="firstName"
+                                    autoFocus
+                                    inputRef={this.firstNameRef}
+                                />
+                            </Grid>
 
-                <RegisterTable players={this.state.players} deletePlayer={this.deletePlayer} />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="lastName"
+                                    label="Last Name"
+                                    id="lastName"
+                                    inputRef={this.lastNameRef}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="level"
+                                    label="Level"
+                                    id="level"
+                                    inputRef={this.levelRef}
+                                />
+                            </Grid>
+
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                        >
+                            Add
+                    </Button>
+                    </form>
+
+                </Container>
+
+                <Container fixed>
+                    <RegisterTable players={this.state.players} deletePlayer={this.deletePlayer} />
+                </Container>
 
             </div>
+
         )
     }
-
-
 
 }
 
