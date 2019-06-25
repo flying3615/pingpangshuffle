@@ -19,8 +19,6 @@ class Register extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log(this.firstNameRef.current.value + "???")
-
         this.setState({
             players: [...this.state.players, {
                 firstName: this.firstNameRef.current.value,
@@ -28,7 +26,6 @@ class Register extends Component {
                 level: this.levelRef.current.value
             }]
         })
-
     }
 
     deletePlayer = (delPlayer) => {
@@ -98,9 +95,11 @@ class Register extends Component {
 
                 </Container>
 
+            {this.state.players.length > 0 &&
                 <Container fixed>
                     <RegisterTable players={this.state.players} deletePlayer={this.deletePlayer} />
                 </Container>
+            }
 
             </div>
 
