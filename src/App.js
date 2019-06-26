@@ -47,6 +47,10 @@ function App() {
     window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   } else {
     const dbHelper = new DBHelper(window.indexedDB)
+    // dbHelper.addPlayer({firstName:'test',lastName:'user',level:5})
+    dbHelper.findPlayerByName("test user", (user)=>console.log("%o player",user))
+
+    dbHelper.findAllPlayers((all)=>(console.log("%o all player", all)))
   }
 
   return (
