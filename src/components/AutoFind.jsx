@@ -28,19 +28,19 @@ function renderInput(inputProps) {
 function renderSuggestion(suggestionProps) {
     const { suggestion, index, itemProps, highlightedIndex, selectedItem } = suggestionProps;
     const isHighlighted = highlightedIndex === index;
-    const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+    const isSelected = (selectedItem || '').indexOf(suggestion.firstName+' '+suggestion.lastName) > -1;
 
     return (
         <MenuItem
             {...itemProps}
-            key={suggestion.label}
+            key={suggestion.firstName+' '+suggestion.lastName}
             selected={isHighlighted}
             component="div"
             style={{
                 fontWeight: isSelected ? 500 : 400,
             }}
         >
-            {suggestion.label}
+            {suggestion.firstName+' '+suggestion.lastName}
         </MenuItem>
     );
 }
@@ -49,7 +49,7 @@ renderSuggestion.propTypes = {
     index: PropTypes.number,
     itemProps: PropTypes.object,
     selectedItem: PropTypes.string,
-    suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
+    suggestion: PropTypes.shape({ firstName: PropTypes.string, lastName: PropTypes.string }).isRequired,
 };
 
 function getSuggestions(value, suggestions, { showEmpty = false } = {}) {
@@ -61,7 +61,7 @@ function getSuggestions(value, suggestions, { showEmpty = false } = {}) {
         ? []
         : suggestions.filter(suggestion => {
             const keep =
-                count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+                count < 5 && (suggestion.firstName+' '+suggestion.lastName).slice(0, inputLength).toLowerCase() === inputValue;
             if (keep) {
                 count += 1;
             }
@@ -143,7 +143,7 @@ export default function AutoFind(props) {
                                             renderSuggestion({
                                                 suggestion,
                                                 index,
-                                                itemProps: getItemProps({ item: suggestion.label }),
+                                                itemProps: getItemProps({ item: suggestion.firstName+' '+suggestion.lastName }),
                                                 highlightedIndex,
                                                 selectedItem,
                                             }),

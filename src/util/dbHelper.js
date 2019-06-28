@@ -43,7 +43,7 @@ class DBHelper {
             tx.oncomplete = () => db.close
             const keyRng = IDBKeyRange.only(name.split(" "));
             const q1 = players.index('firstName, lastName').openCursor(keyRng)
-            q1.onsuccess = () => cb(q1.result.value)
+            q1.onsuccess = () => cb(q1.result)
         }
     }
 
@@ -61,7 +61,6 @@ class DBHelper {
         }
 
     }
-
 
 }
 

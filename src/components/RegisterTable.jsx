@@ -19,14 +19,18 @@ const RegTable = (props) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {props.players && props.players.map(p => (
-                    <TableRow key={p.firstName+p.lastName}>
-                        <TableCell>{p.firstName}</TableCell>
-                        <TableCell>{p.lastName}</TableCell>
-                        <TableCell>{p.level}</TableCell>
-                        <TableCell><Button color="secondary" onClick={()=>props.deletePlayer(p)}>Delete</Button></TableCell>
-                    </TableRow>
-                ))}
+                {props.players && props.players.map(p => {
+                    console.log("%o", p)
+                    return (
+                        <TableRow key={p.firstName + p.lastName}>
+                            <TableCell>{p.firstName}</TableCell>
+                            <TableCell>{p.lastName}</TableCell>
+                            <TableCell>{p.level}</TableCell>
+                            <TableCell><Button color="secondary" onClick={() => props.deletePlayer(p)}>Delete</Button></TableCell>
+                        </TableRow>
+                    )
+                    }
+                )}
             </TableBody>
         </Table>
     )
