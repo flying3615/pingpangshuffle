@@ -12,6 +12,9 @@ import Play from '../container/Play'
 import Register from '../container/Register'
 import Statistic from '../container/Statistic'
 
+import { DBContext } from '../App'
+
+
 function TabContainer(props) {
     return (
         <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -35,6 +38,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SimpleTabs(props) {
+
+
+
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -51,13 +57,28 @@ export default function SimpleTabs(props) {
                         <Tab label="Play" />
                         <Tab label="Statistic" />
                     </Tabs>
-                    <Typography style={{flexGrow:1}}/>
+                    <Typography style={{ flexGrow: 1 }} />
                     <Typography variant="h6" color="inherit"><Clock format="HH:mm:ss" ticking={true} interval={1000} /></Typography>
                 </Toolbar>
             </AppBar>
-            {value === 0 && <TabContainer><Register /></TabContainer>}
-            {value === 1 && <TabContainer><Play totalPlayers={props.totalPlayers}/></TabContainer>}
+
+            {value === 0 && 
+                <TabContainer>
+                    <DBContext.Consumer>
+                    {(dbContext) => (<Register dbContext={dbContext}/>)}
+                    </DBContext.Consumer>
+                </TabContainer>
+            }
+
+            {value === 1 && 
+                <TabContainer>
+                    <DBContext.Consumer>
+                        {(dbContext) =>(<Play totalPlayers={props.totalPlayers} dbContext={dbContext} />)}
+                    </DBContext.Consumer>
+                </TabContainer>
+            }
             {value === 2 && <TabContainer><Statistic /></TabContainer>}
+
         </div>
     );
 }

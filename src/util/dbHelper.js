@@ -18,7 +18,7 @@ class DBHelper {
         request.onsuccess = () => console.log('running onsuccess')
     }
 
-    addPlayer(player,cb) {
+    addPlayer(player) {
 
         const request = this.idb.open(DB_Name, 1)
 
@@ -28,7 +28,18 @@ class DBHelper {
             const players = tx.objectStore(STORE_NAME);
             tx.oncomplete = () => db.close
             players.add(player)
-            cb(players.add(player))
+        }
+    }
+
+    dropStore(cb) {
+        const request = this.idb.open(DB_Name, 1)
+
+        request.onsuccess = (event) => {
+            const db = event.target.result
+            const tx = db.transaction([STORE_NAME], 'readwrite');
+            const players = tx.objectStore(STORE_NAME);
+            const q1 = players.clear()
+            q1.onsuccess = () => cb()
         }
     }
 

@@ -16,16 +16,24 @@ class Register extends Component {
 
     }
 
+    componentDidMount() {
+        this.props.dbContext
+        .findAllPlayers((allPlayer) => this.setState({players: allPlayer}))
+    }
+    
     handleSubmit = (e) => {
         e.preventDefault();
 
+        const newPlayer = {
+            firstName: this.firstNameRef.current.value,
+            lastName: this.lastNameRef.current.value,
+            level: this.levelRef.current.value
+        }
         this.setState({
-            players: [...this.state.players, {
-                firstName: this.firstNameRef.current.value,
-                lastName: this.lastNameRef.current.value,
-                level: this.levelRef.current.value
-            }]
+            players: [...this.state.players, newPlayer]
         })
+
+        this.props.dbContext.addPlayer(newPlayer)
     }
 
     deletePlayer = (delPlayer) => {
@@ -94,13 +102,11 @@ class Register extends Component {
                     </form>
 
                 </Container>
-
-            {this.state.players.length > 0 &&
+            
                 <Container fixed>
                     <RegisterTable players={this.state.players} deletePlayer={this.deletePlayer} />
                 </Container>
-            }
-
+        
             </div>
 
         )

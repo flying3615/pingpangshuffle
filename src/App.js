@@ -1,63 +1,85 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Navigator from './components/Navigator'
 import DBHelper from './util/dbHelper'
+import { env } from './util/env'
 
-function App() {
+export const DBContext = React.createContext();
+const dbHelper = window.indexedDB ? new DBHelper(window.indexedDB) : null
 
-  //read this from local DB
-  const totalPlayers = [
-    { firstName: 'Afghanistan', lastName: 'testLast'},
-    { firstName: 'Aland Islands', lastName: 'testLast'},
-    { firstName: 'Albania', lastName: 'testLast'},
-    { firstName: 'Algeria', lastName: 'testLast'},
-    { firstName: 'American Samoa', lastName: 'testLast'},
-    { firstName: 'Andorra', lastName: 'testLast'},
-    { firstName: 'Angola', lastName: 'testLast'},
-    { firstName: 'Anguilla', lastName: 'testLast'},
-    { firstName: 'Antarctica', lastName: 'testLast'},
-    { firstName: 'Antigua and Barbuda', lastName: 'testLast'},
-    { firstName: 'Argentina', lastName: 'testLast'},
-    { firstName: 'Armenia', lastName: 'testLast'},
-    { firstName: 'Aruba', lastName: 'testLast'},
-    { firstName: 'Australia', lastName: 'testLast'},
-    { firstName: 'Austria', lastName: 'testLast'},
-    { firstName: 'Azerbaijan', lastName: 'testLast'},
-    { firstName: 'Bahamas', lastName: 'testLast'},
-    { firstName: 'Bahrain', lastName: 'testLast'},
-    { firstName: 'Bangladesh', lastName: 'testLast'},
-    { firstName: 'Barbados', lastName: 'testLast'},
-    { firstName: 'Belarus', lastName: 'testLast'},
-    { firstName: 'Belgium', lastName: 'testLast'},
-    { firstName: 'Belize', lastName: 'testLast'},
-    { firstName: 'Benin', lastName: 'testLast'},
-    { firstName: 'Bermuda', lastName: 'testLast'},
-    { firstName: 'Bhutan', lastName: 'testLast'},
-    { firstName: 'Bolivia, Plurinational State of', lastName: 'testLast'},
-    { firstName: 'Bonaire, Sint Eustatius and Saba', lastName: 'testLast'},
-    { firstName: 'Bosnia and Herzegovina', lastName: 'testLast'},
-    { firstName: 'Botswana', lastName: 'testLast'},
-    { firstName: 'Bouvet Island', lastName: 'testLast'},
-    { firstName: 'Brazil', lastName: 'testLast'},
-    { firstName: 'British Indian Ocean Territory', lastName: 'testLast'},
-    { firstName: 'Brunei Darussalam', lastName: 'testLast'},
-  ];
+const totalPlayers = [
+  //Marvel
+  { firstName: 'Spider', lastName: 'Man', level: 1 },
+  { firstName: 'Luke', lastName: 'Cage', level: 2 },
+  { firstName: 'Emma', lastName: 'Frost', level: 2 },
+  { firstName: 'Doctor', lastName: 'Strange', level: 1 },
+  { firstName: 'Captain', lastName: 'America', level: 5 },
+  { firstName: 'Black', lastName: 'Panther', level: 1 },
+  { firstName: 'Nick', lastName: 'Fury', level: 5 },
+  { firstName: 'Black', lastName: 'Widow', level: 2 },
+  { firstName: 'Jessica', lastName: 'Jones', level: 2 },
+  { firstName: 'Bucky', lastName: 'Barnes', level: 5 },
+  { firstName: 'Black', lastName: 'Bolt', level: 2 },
+  { firstName: 'Silver', lastName: 'Surfer', level: 5 },
+  { firstName: 'Rocket', lastName: 'Raccoon', level: 3 },
+  //GOT
+  { firstName: 'Daenerys', lastName: 'Targaryen', level: 3 },
+  { firstName: 'Joffrey', lastName: 'Baratheon', level: 5 },
+  { firstName: 'Samwell', lastName: 'Tarly', level: 2 },
+  { firstName: 'Sansa', lastName: 'Stark', level: 4 },
+  { firstName: 'Stannis', lastName: 'Baratheon', level: 5 },
+  { firstName: 'Balon', lastName: 'Greyjoy', level: 4 },
+  { firstName: 'Eddard', lastName: 'Stark', level: 4 },
+  { firstName: 'Cersei', lastName: 'Lannister', level: 4 },
+  { firstName: 'Petyr', lastName: 'Baelish', level: 5 },
+  { firstName: 'Euron', lastName: 'Greyjoy', level: 5 },
+  { firstName: 'Jon', lastName: 'Snow', level: 1 },
+  { firstName: 'Jaime', lastName: 'Lannister', level: 2 },
+  { firstName: 'Arya', lastName: 'Stark', level: 4 },
+  { firstName: 'Theno', lastName: 'Greyjoy', level: 5 },
+  { firstName: 'Viserys', lastName: 'Targaryen', level: 2 },
+  { firstName: 'Robert', lastName: 'Baratheon', level: 4 },
+  { firstName: 'Jorah', lastName: 'Mormeon', level: 3 },
+  { firstName: 'Bran', lastName: 'Stark', level: 5 },
+  { firstName: 'Davos', lastName: 'Seaworth', level: 1 },
+  { firstName: 'Grey', lastName: 'Worm', level: 3 },
+  { firstName: 'Roose', lastName: 'Bolton', level: 2 },
+];
 
-  if (!window.indexedDB) {
-    window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-  } else {
-    const dbHelper = new DBHelper(window.indexedDB)
-    // dbHelper.addPlayer({firstName:'test',lastName:'user',level:5})
-    dbHelper.findPlayerByName("test user", (user)=>console.log("%o player",user))
 
-    dbHelper.findAllPlayers((all)=>(console.log("%o all player", all)))
+
+class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = { allPlayers: [] }
   }
 
-  return (
-    <div>
-      <Navigator totalPlayers={totalPlayers} />
-    </div>
-  );
+  componentDidMount() {
+    if (env === 'dev') {
+      dbHelper.dropStore(() => {
+        console.log("====clean store======")
+        totalPlayers.forEach(p => dbHelper.addPlayer(p))
+
+        dbHelper.findAllPlayers((allPlayers) => {
+          this.setState({ allPlayers })
+        })
+      })
+    } else {
+      dbHelper.findAllPlayers((allPlayers) => {
+        this.setState({ allPlayers })
+      })
+    }
+    
+  }
+
+  render() {
+    return (
+      <DBContext.Provider value={dbHelper}>
+        <Navigator totalPlayers={this.state.allPlayers} />
+      </DBContext.Provider>
+    )
+  }
 }
 
 export default App;
