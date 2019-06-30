@@ -1,4 +1,4 @@
-class ShufflePlayers {
+export default class ShufflePlayers {
 
     constructor(totalTablesNumber) {
         this.totalTablesNumber = totalTablesNumber
@@ -13,7 +13,7 @@ class ShufflePlayers {
         const finalSortedPlayers = []
 
         // 1).first around allocate single
-        for (let i = 1; i <= tablesNumber; i++) {
+        for (let i = 1; i <= this.totalTablesNumber; i++) {
             const player1 = totalPlayers.shift()
             const player2 = totalPlayers.shift()
 
@@ -29,7 +29,7 @@ class ShufflePlayers {
         }
 
         // 2).fill table as double from table 1 with the rest players
-        for (let i = 1; i <= tablesNumber; i++) {
+        for (let i = 1; i <= this.totalTablesNumber; i++) {
             const player1 = totalPlayers.shift()
             const player2 = totalPlayers.shift()
 
@@ -80,7 +80,8 @@ class ShufflePlayers {
 
     printArrangement(finalSortedPlayers) {
         const groupedPlayer = this._groupBy(finalSortedPlayers, (p) => p.currentTable);
-        console.log(Object.keys(groupedPlayer).map(k => ({ [k]: JSON.stringify(groupedPlayer[k].map(p => p.name)) })));
+        return Object.keys(groupedPlayer)
+        .map(k => ({ [k]: JSON.stringify(groupedPlayer[k].map(p => p.firstName+' '+p.lastName+'('+p.level+')')) }));
     }
 
     _arrangeNextRound(finalSortedPlayers) {
@@ -152,35 +153,35 @@ class ShufflePlayers {
 // To get double tables and single tables
 // 4x+2y= peopleNum and x+y=tablesNumber
 
-const tablesNumber = 16
-const rounds = 8
-const peopleNum = 46
+// const tablesNumber = 16
+// const rounds = 8
+// const peopleNum = 33
 
-const players = [...Array(peopleNum).keys()].map(i => ({
-    name: ["player" + i],
-    table: { single: [], double: [] },
-    tmpSingle: 0,
-    currentTable: 0,
-    level: 5
-}))
+// const players = [...Array(peopleNum).keys()].map(i => ({
+//     name: ["player" + i],
+//     table: { single: [], double: [] },
+//     tmpSingle: 0,
+//     currentTable: 0,
+//     level: 5
+// }))
 
-const shuffler = new ShufflePlayers(tablesNumber)
+// const shuffler = new ShufflePlayers(tablesNumber)
 
+// let nextRoundArrangement = players
+// let finalSortedPlayers = []
 
-let nextRoundArrangement = players
+// for (let time = 0; time < rounds; time++) {
 
-for (let time = 0; time < rounds; time++) {
+//     ({ finalSortedPlayers, nextRoundArrangement } = shuffler.arrangeTable(nextRoundArrangement))
 
-    ({ finalSortedPlayers, nextRoundArrangement } = shuffler.arrangeTable(nextRoundArrangement))
+//     console.log('round ' + time)
+//     shuffler.printArrangement(finalSortedPlayers)
+// }
 
-    console.log('round ' + time)
-    shuffler.printArrangement(finalSortedPlayers)
-}
-
-// print out single statistic
-console.log('----------Print Single Player Played Rounds---------------')
-for (let r = 0; r < rounds; r++) {
-    console.log(r + " times single = " + JSON.stringify(finalSortedPlayers.filter(p => p.table.single.length == r).length))
-}
+// // print out single statistic
+// console.log('----------Print Single Player Played Rounds---------------')
+// for (let r = 0; r < rounds; r++) {
+//     console.log(r + " times single = " + JSON.stringify(finalSortedPlayers.filter(p => p.table.single.length == r).length))
+// }
 
 // console.log(JSON.stringify(finalSortedPlayers))

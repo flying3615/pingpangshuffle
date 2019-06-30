@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
+import styles from './App.css';
 import Navigator from './components/Navigator'
 import DBHelper from './util/dbHelper'
+import MadeWithLove from './util/footer.jsx'
 import { env } from './util/env'
 
 export const DBContext = React.createContext();
@@ -46,8 +47,6 @@ const totalPlayers = [
   { firstName: 'Roose', lastName: 'Bolton', level: 2 },
 ];
 
-
-
 class App extends Component {
 
   constructor(props) {
@@ -77,6 +76,7 @@ class App extends Component {
     return (
       <DBContext.Provider value={dbHelper}>
         <Navigator totalPlayers={this.state.allPlayers} />
+        <MadeWithLove />
       </DBContext.Provider>
     )
   }
