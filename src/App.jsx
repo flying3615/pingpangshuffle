@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styles from './App.css';
 import Navigator from './components/Navigator'
-import DBHelper from './util/dbHelper'
+import DBHelper from './util/DBHelper'
 import MadeWithLove from './util/footer.jsx'
-import { env } from './util/env'
+import { env } from './util/Env'
 
 export const DBContext = React.createContext();
 const dbHelper = window.indexedDB ? new DBHelper(window.indexedDB) : null

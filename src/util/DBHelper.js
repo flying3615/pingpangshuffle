@@ -1,6 +1,5 @@
+import { DB_Name, STORE_NAME} from './Env'
 
-const DB_Name = 'Empire Table Tennis'
-const STORE_NAME = 'players'
 class DBHelper {
     constructor(idb) {
         this.idb = idb
