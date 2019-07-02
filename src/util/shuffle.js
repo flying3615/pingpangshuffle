@@ -5,10 +5,39 @@ export default class ShufflePlayers {
         this.lastDoubleTable = 0
     }
 
+
+    arrangeTableDouble(totalPlayers) {
+
+        //TODO goupby level
+
+        const finalSortedPlayers = []
+
+        for (let i = 1; i <= this.totalTablesNumber; i++) {
+            const player1 = totalPlayers.shift()
+            const player2 = totalPlayers.shift()
+            const player3 = totalPlayers.shift()
+            const player4 = totalPlayers.shift()
+
+            this._addPlayer(player1, finalSortedPlayers, i)
+            this._addPlayer(player2, finalSortedPlayers, i)
+            this._addPlayer(player3, finalSortedPlayers, i)
+            this._addPlayer(player4, finalSortedPlayers, i)
+
+        }
+    }
+
+    _addPlayer(player, finalSortedPlayers, tableNum) {
+        if (player) {
+            player.tmpSingle = tableNum
+            player.currentTable = tableNum
+            finalSortedPlayers.push(player)
+        }
+    }
+
     /**
      * return {sortedPlayer, next time arrangement}
      */
-    arrangeTable(totalPlayers) {
+    arrangeTableSingle(totalPlayers) {
 
         const finalSortedPlayers = []
 
@@ -81,7 +110,7 @@ export default class ShufflePlayers {
     printArrangement(finalSortedPlayers) {
         const groupedPlayer = this._groupBy(finalSortedPlayers, (p) => p.currentTable);
         return Object.keys(groupedPlayer)
-        .map(k => ({ [k]: JSON.stringify(groupedPlayer[k].map(p => p.firstName+' '+p.lastName+'('+p.level+')')) }));
+            .map(k => ({ [k]: JSON.stringify(groupedPlayer[k].map(p => p.firstName + ' ' + p.lastName + '(' + p.level + ')')) }));
     }
 
     _arrangeNextRound(finalSortedPlayers) {
